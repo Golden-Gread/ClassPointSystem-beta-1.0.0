@@ -9,13 +9,17 @@
 #include <list>
 #include <filesystem>
 #include "class_point_system_C++_1_0_0beta.h"
+#include "ClassPointSystemLoginC++1_0_0Beta.h"
+typedef pair<string,string> setting;
+
+
 
 using namespace std;
 namespace fs = std::filesystem;
 using namespace fs;
 
 
-
+LogFile lf;
 
 class PointFile{
     private:
@@ -152,6 +156,40 @@ inline void RecordFile::write_record(list<string> rlist){
 
 
 
+
+class ConfitFile{
+private:
+	string filepath="";
+	list<setting> settings_list={};
+public:
+	void loading_settings();
+	void saving_settings();
+	pair<bool,string> searching_settings(string setting_name);
+	void changeing_setting(setting settings);
+	void setting_filepath(string path);
+	
+	
+};
+
+inline void ConfitFile::loading_settings(){
+	settings_list.clear();
+	setting s;
+	
+	ifstream confit;string setting_string="";
+	if(exists(filepath)){
+		confit.open(filepath);
+		while(getline(confit,setting_string)){
+			s.first=setting_string.substr(0,(int)setting_string.find(':'));
+			s.second=setting_string.substr(setting_string.find(':'));
+			settings_list.push_back(s);
+		}
+	}
+	else{
+		cout << "File not found" << endl;
+	}
+	
+	
+}
 
 
 

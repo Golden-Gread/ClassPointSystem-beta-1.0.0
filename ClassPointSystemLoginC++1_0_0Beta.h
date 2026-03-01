@@ -8,7 +8,27 @@
 #include <iomanip>
 #include <ctime>
 
+
 using namespace std;
+
+
+class Time{
+private:
+	
+public:
+	string get_time(){
+		time_t now=time(nullptr);
+		tm* timeinfo = localtime(&now);
+		char buffer[100];
+		strftime(buffer, sizeof(buffer), "%Y/%m/%d %H:%M:%S", timeinfo);
+		return string(buffer);
+	}
+};
+
+Time system_time;
+
+
+
 
 class LogFile{
     private:
@@ -27,14 +47,16 @@ inline void LogFile::set_fliename(string filepath){
 
 
 inline void LogFile::write_log(string login){
-	time_t now = time(nullptr);
-	tm* timeinfo = localtime(&now);
-	char buffer[100];
-	strftime(buffer, sizeof(buffer), "%Y/%m/%d %H:%M:%S", timeinfo);
+	//time_t now = time(nullptr);
+	//tm* timeinfo = localtime(&now);
+	
+	//strftime(buffer, sizeof(buffer), "%Y/%m/%d %H:%M:%S", timeinfo);
+	
+	
 	
     ofstream wf;
     wf.open(filename,ios::app);
-    wf <<"["<<buffer<<"]"<< login << endl;
+    wf <<"["<<system_time.get_time()<<"]"<< login << endl;
     wf.close();
 }
 

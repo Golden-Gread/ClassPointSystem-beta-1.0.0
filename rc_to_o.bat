@@ -1,0 +1,1 @@
+windres ClassPointSystemWindow.rc -o ClassPointSystemWindow.o

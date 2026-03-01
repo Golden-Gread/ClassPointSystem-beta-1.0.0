@@ -20,11 +20,10 @@ using namespace std;
 class PointList{
     private:
         list<point> plist;
-		
-		
+		LogFile lf;
 	
     public:
-		LogFile lf;
+		
 		void restart(){lf.set_fliename("logfile.log");}
         void add_point(point p);
         void remove_point(string n);
@@ -129,7 +128,7 @@ inline void PointList::change_point(string n, int d){
         for(auto it = plist.begin();it != plist.end(); ++it){
             if (it->point::get_name() == n){
                 it->point::change_point(d);
-                lf.LogFile::write_log("[<classlist.h> PointList::change_point][Info] Changing point data competely.");
+                lf.LogFile::write_log("[<classlist.h> PointList::change_point][Info] Changing "+n+"\'s point data competely.");
                 break;
             }
         }
@@ -138,7 +137,6 @@ inline void PointList::change_point(string n, int d){
         cout << "Point not found" << endl;
         lf.LogFile::write_log("[<classlist.h> PointList::change_point][Warning] Do not find point.");
     }
-
 }
 
 inline int PointList::print_point(string n){

@@ -19,16 +19,18 @@ namespace fs = std::filesystem;
 using namespace fs;
 
 
-LogFile lf;
+
 
 class PointFile{
     private:
         string filename;
+		LogFile lf;
     public:
         void set_filename(string filename);
         list<point> read_point();
         void write_point(list<point> plist);
-
+		PointFile():filename(""){lf.set_fliename("logfile.log");}
+	
 
 };
 
@@ -95,63 +97,65 @@ inline void PointFile::write_point(list<point> plist){
 }
 
 
-
 //记录文件类
 
 class RecordFile{
-    private:
-        string filename;
-    public:
-        void set_filename(string filename);
-        list<string> read_record();
-        void write_record(list<string> rlist);
+private:
+	string filename;
+	LogFile lf;
+public:
+	void set_filename(string filename);
+	list<string> read_record();
+	void write_record(list<string> rlist);
+	RecordFile():filename(""){lf.set_fliename("logfile.log");}
 };
 
 
 
 
 inline void RecordFile::set_filename(string filename){
-    this->filename = filename;
+	this->filename = filename;
 }
 
 inline list<string> RecordFile::read_record(){
-    list<string> rlist;
-    string line;
-    ifstream rf;
-    if (exists(filename)){
-        rf.open(filename, ios::in);
-        while (getline(rf, line)){
-            rlist.push_back(line);
-        }
-        rf.close();
-        return rlist;
-    }
-    else{
-        cout << "File not found" << endl;
-        ifstream rf;
-        ofstream tf;
-        tf.open(filename, ios::out);
-        tf.close();
-        rf.open(filename, ios::in);
-        while (getline(rf, line)){
-            rlist.push_back(line);
-        }
-        rf.close();
-        return rlist;
-    }
+	list<string> rlist;
+	string line;
+	ifstream rf;
+	if (exists(filename)){
+		rf.open(filename, ios::in);
+		while (getline(rf, line)){
+			rlist.push_back(line);
+		}
+		rf.close();
+		return rlist;
+	}
+	else{
+		cout << "File not found" << endl;
+		ifstream rf;
+		ofstream tf;
+		tf.open(filename, ios::out);
+		tf.close();
+		rf.open(filename, ios::in);
+		while (getline(rf, line)){
+			rlist.push_back(line);
+		}
+		rf.close();
+		return rlist;
+	}
 }
 
 
 
 inline void RecordFile::write_record(list<string> rlist){
-    ofstream wf;
-    wf.open(filename, ios::out);
-    for (auto it = rlist.begin(); it!= rlist.end(); it++){
-        wf << *it << endl;
-
-    }
-    wf.close();
+	ofstream wf;
+	wf.open(filename, ios::out);
+	for (auto it = rlist.begin(); it!= rlist.end(); it++){
+		wf << *it << endl;
+		
+	}
+	wf.close();
 }
+
 
 
 
@@ -161,13 +165,14 @@ class ConfitFile{
 private:
 	string filepath="";
 	list<setting> settings_list={};
+	LogFile lf;
 public:
 	void loading_settings();
 	void saving_settings();
 	pair<bool,string> searching_settings(string setting_name);
 	void changeing_setting(setting settings);
 	void setting_filepath(string path);
-	
+	ConfitFile():filepath(""){lf.set_fliename("logfile.log");}
 	
 };
 
@@ -186,12 +191,22 @@ inline void ConfitFile::loading_settings(){
 	}
 	else{
 		cout << "File not found" << endl;
+		lf.write_log("[<File.h> ConfitFile::loading_setting][Warning] ConfitFile was not found.");
 	}
 	
 	
 }
 
-
+inline void ConfitFile::saving_settings(){
+	ofstream confit;
+	confit.open(filepath);
+	
+	for(auto it=settings_list.begin();it!=settings_list.end();it++){
+		confit<<it->first<<":"<<it->second<<endl;
+	}
+	
+	
+}
 
 
 #endif
